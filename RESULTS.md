@@ -8,51 +8,22 @@
 
 ## CloudFront URL
 
-```
-https://dXXXXXXXXXXXXX.cloudfront.net
-```
-
-> Замініть на свій реальний Distribution domain name з AWS Console → CloudFront → General.
-
----
+https://d2s5wljjyxb7gv.cloudfront.net/
 
 ## S3 bucket
 
-```
-bedev-student-polina-vasylenko
-```
-
-> Замініть на фактичне ім'я вашого bucket (регіон: **us-east-1**).
+`bedev-polina-vasylenko` · регіон **us-east-1**
 
 ---
 
-## Що зроблено
+## AWS (Console)
 
-### Сайт (`index.html`)
-
-- [x] Валідний HTML5, кодування UTF-8
-- [x] Ім'я на сторінці: **Polina Vasylenko**
-- [x] Короткий опис (1–2 речення) — вчу програмування, built a cat endless runner
-- [x] Посилання: [LinkedIn](https://www.linkedin.com/in/polina-vasylenko/) та [GitHub](https://github.com/Wafanya)
-- [x] Осмислений `<title>`: `Polina Vasylenko — Cat Runner`
-- [x] Додатково: міні-гра Cat Runner (стрибок / присід), стилі inline + Google Font Nunito
-
-### Сторінка помилки (`error.html`)
-
-- [x] Кастомна 404-сторінка з повідомленням «Page not found»
-- [x] Кнопка повернення на `index.html`
-- [x] Стиль узгоджений з головною сторінкою
-
-### AWS (Console, us-east-1)
-
-- [x] Створено S3 bucket з **Block all public access = On**
-- [x] Завантажено `index.html` та `error.html` (Content-Type: `text/html`)
-- [x] Створено CloudFront distribution з origin = S3 bucket
-- [x] Увімкнено **Allow private S3 bucket access to CloudFront** (OAC)
-- [x] Вказано **Default root object:** `index.html`
-- [x] Налаштовано custom error response: **404 → /error.html** (HTTP 404)
-- [x] Перевірено bucket policy (CloudFront має `s3:GetObject`)
-- [x] Після оновлень — invalidation `/*`
+- S3 bucket, public access заблоковано
+- Завантажено `index.html`, `error.html`
+- CloudFront distribution + OAC (private S3 access)
+- Default root object: `index.html`
+- Custom error response: 404 → `/error.html`
+- Invalidation `/*` після оновлень
 
 ---
 
@@ -60,44 +31,29 @@ bedev-student-polina-vasylenko
 
 | Критерій | Статус |
 |----------|--------|
-| Сайт відкривається по HTTPS на `*.cloudfront.net` | ✅ |
-| Ім'я, опис, посилання на сторінці | ✅ |
-| `/blabla` показує `error.html` зі статусом 404 | ✅ |
-| S3 bucket закритий для публіки | ✅ |
+| HTTPS на `*.cloudfront.net` | ✅ |
+| Вимоги до сторінки (див. `index.html`) | ✅ |
+| `/blabla` → `error.html`, статус 404 | ✅ |
+| S3 закритий для публіки | ✅ |
 
 ---
 
 ## Група 4 — Headers detective
 
-DevTools → Network → `index.html` → Response Headers:
-
 | Заголовок | Що знайшли | Що означає |
 |-----------|------------|------------|
-| `x-cache` | `Hit from cloudfront` / `Miss from cloudfront` | **Hit** — файл віддано з кешу edge-сервера CloudFront, S3 не чіпали. **Miss** — у кеші не було, CloudFront забрав свіжу копію з S3 і закешував. |
-| `x-amz-cf-pop` | напр. `WAW52-P3` | **Point of Presence** — edge-сервер, найближчий до користувача. `WAW` ≈ Варшава, `52` — датацентр, `P3` — конкретний сервер. |
-| `x-amz-cf-id` | довгий рядок | Унікальний ID одного запиту через CloudFront. Корисно для логів і support. |
-| `age` | число в секундах | Скільки секунд тому об'єкт потрапив у кеш. `age: 3600` = у кеші вже 1 годину. |
-| `cache-control` | `max-age=86400` (CachingOptimized) | Скільки секунд браузер/CloudFront можуть тримати файл без перевірки. `86400` = 24 год. |
+| `x-cache` | `Hit from cloudfront` / `Miss from cloudfront` | **Hit** — з кешу edge-сервера. **Miss** — свіжа копія з S3. |
+| `x-amz-cf-pop` | `WAW51-P3` | Edge-сервер CloudFront (WAW ≈ Варшава). |
+| `x-amz-cf-id` | `7Sm1s4KC1ieJFoHbdU5FaqK8LyDGF1XR0RpagMbIlzaDlR2rHShybw==` | ID запиту для логів. |
+| `age` | 803 | Скільки секунд об'єкт у кеші. |
+| `cache-control` | `no-cache` | Клієнт має перевіряти актуальність перед використанням кешу (revalidate). |
 
-### Спостереження
-
-1. **Cmd+Shift+R кілька разів:** `x-cache` стає `Hit`, `age` зростає — CloudFront віддає закешовану версію.
-2. **Invalidation `/*` + hard reload:** `x-cache` знову `Miss`, `age` ≈ 0 — кеш скинуто, файл знову взяли з S3.
+**Спостереження:** після hard reload — `Hit`, `age` росте. Після invalidation `/*` — знову `Miss`, `age` ≈ 0.
 
 ---
 
-## Що сподобалось / збентежило
+## Рефлексія
 
-**Сподобалось:** сайт доступний по HTTPS без власного сервера; CloudFront роздає контент швидко з найближчого POP (у мене — Варшава).
+**Сподобалось:** HTTPS і швидка роздача без свого сервера.
 
-**Збентежило:** після оновлення `index.html` у S3 сайт показував стару версію, поки не зробила invalidation `/*` — треба пам'ятати про кеш CDN.
-
----
-
-## Файли в репозиторії
-
-| Файл | Опис |
-|------|------|
-| `index.html` | Головна сторінка + гра Cat Runner |
-| `error.html` | Кастомна 404 |
-| `RESULTS.md` | Цей файл — звіт по домашці |
+**Збентежило:** після оновлення файлу в S3 сайт показував стару версію, поки не зробила invalidation.
