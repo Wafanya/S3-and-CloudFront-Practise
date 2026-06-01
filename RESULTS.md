@@ -36,6 +36,9 @@ https://d2s5wljjyxb7gv.cloudfront.net/
 | `/blabla` → `error.html`, статус 404 | ✅ |
 | S3 закритий для публіки | ✅ |
 
+<img width="763" height="705" alt="image" src="https://github.com/user-attachments/assets/1abf0432-28b0-4977-b5b2-70eb6f7a3f1e" />
+
+
 ---
 
 ## Група 4 — Headers detective
