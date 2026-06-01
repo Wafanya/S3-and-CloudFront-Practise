@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page not found — Polina Vasylenko</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #faf8f5;
+      --card: #ffffff;
+      --text: #2c2c2c;
+      --muted: #7a7a7a;
+      --accent: #e07a5f;
+      --accent-soft: #f4a261;
+      --link: #5c6b73;
+      --border: #e8e4df;
+      --shadow: 0 8px 32px rgba(44, 44, 44, 0.08);
+    }
+
+    body {
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(244, 162, 97, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(168, 216, 234, 0.18) 0%, transparent 40%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 48px 32px;
+      text-align: center;
+    }
+
+    .icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      animation: wobble 2s ease-in-out infinite;
+    }
+
+    @keyframes wobble {
+      0%, 100% { transform: rotate(-4deg); }
+      50% { transform: rotate(4deg); }
+    }
+
+    .code {
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--muted);
+      max-width: 320px;
+      margin: 0 auto 28px;
+    }
+
+    .btn {
+      display: inline-block;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 10px 24px;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    }
+
+    .btn:hover {
+      background: #fff;
+      border-color: var(--accent-soft);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    footer {
+      margin-top: 24px;
+      font-size: 0.78rem;
+      color: #bbb;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="card">
+    <div class="icon">😿</div>
+    <p class="code">404</p>
+    <h1>Page not found</h1>
+    <p>
+      The cat looked everywhere, but this page doesn't exist.
+      Maybe it ran off chasing something shiny.
+    </p>
+    <a class="btn" href="index.html">← Back to Cat Runner</a>
+  </main>
+
+  <footer>Polina Vasylenko</footer>
+
+</body>
+</html>
